@@ -1,8 +1,21 @@
 const Koa = require('koa');
 const Router = require('koa-router');
+const api = require('./api');
+const coffee = require('./api/test');
+const bodyParser = require('koa-bodyparser');
 
 const app = new Koa();
 const router = new Router();
+
+//router 설정
+router.use('/api', api.routes());
+router.use('/drink', coffee.routes());
+
+//router 적용 전에 bodyParser 적용
+app.use(bodyParser());
+
+//app 인스턴스에 router를 적용
+app.use(router.routes()).use(router.allowedMethods());
 
 // //koa는 미들웨어의 배열로 구성되어 있다.
 // //app.use 를 통해 미들웨어 함수를 어플리케이션에 등록한다.
@@ -40,18 +53,21 @@ router.get('/', (ctx) => {
     ctx.body = '홈';
 });
 
+//url 파라미터
 router.get('/about/:name?', (ctx) => {
     const { name } = ctx.params;
-    ctx.body = `소개합니다. ${name} 입니다 ! `;
+    ctx.body = name ? `${name}를 소개합니다 !` : `소개할 사람을 검색해주세요`;
 });
 
-router.get('/posts', (ctx) => {
-    const { id } = ctx.query;
-    ctx.body = id ? `포스트 #${id}` : `포스트 아이디가 없습니다`;
-});
+// //url 쿼리
+// router.get('/posts', (ctx) => {
+//     const { id, name } = ctx.query;
+//     ctx.body = id
+//         ? `글 번호 #${id}` + (name ? ` 이름은 '${name}'` : '')
+//         : `해당 글이 없습니다.`;
+// });
 
 //app 인스턴스에 라우터 적용
-app.use(router.routes()).use(router.allowedMethods());
 
 app.listen(4000, () => {
     console.log('Listening to port 4000');
