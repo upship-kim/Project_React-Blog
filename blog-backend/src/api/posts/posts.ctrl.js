@@ -19,7 +19,7 @@ const posts = [
 */
 
 //export.함수 이름 지정
-exports.write = (ctx) => {
+export const write = (ctx) => {
     //Rest API의 Request Body는 ctx.request.body 에서 조회 가능
     const { title, body } = ctx.request.body;
     postId += 1;
@@ -34,7 +34,7 @@ exports.write = (ctx) => {
     GET /api/posts
 */
 
-exports.list = (ctx) => {
+export const list = (ctx) => {
     ctx.body = posts;
 };
 ///////////////////////
@@ -44,7 +44,7 @@ exports.list = (ctx) => {
     GET /api/posts/:id
 */
 
-exports.read = (ctx) => {
+export const read = (ctx) => {
     const { id } = ctx.params;
     //id값으로 특정 포스트를 검색
     //파라미터로 받아온 값은 문자열 형식이므로 파라미터를 숫자로 변환하거나
@@ -66,7 +66,7 @@ exports.read = (ctx) => {
     DELETE /api/posts/:id
 */
 
-exports.remove = (ctx) => {
+export const remove = (ctx) => {
     const { id } = ctx.params;
     //해당 id를 가진 posts가 몇 번째인지 확인한다. ( 추후 splice 함수를 쓰기 위함)
 
@@ -91,7 +91,7 @@ exports.remove = (ctx) => {
     {title, body}
 */
 
-exports.replace = (ctx) => {
+export const replace = (ctx) => {
     const { id } = ctx.params;
     const { title, body } = ctx.request.body;
 
@@ -118,7 +118,7 @@ exports.replace = (ctx) => {
     {title, body}
 */
 
-exports.update = (ctx) => {
+export const update = (ctx) => {
     const { id } = ctx.params;
 
     const index = posts.findIndex((p) => p.id.toString() === id); //배열 안에서 수정해야함(그러니까 index를 찾아야함)
