@@ -1,4 +1,21 @@
 import Post from '../../models/post';
+import mongoose from 'mongoose';
+/*
+    ObjectId 검증 미들웨어
+*/
+//mongoose Type중 ObjectId Type을 비구조화 할당
+const { ObjectId } = mongoose.Types;
+
+//미들 웨어 작성
+export const checkObjectId = (ctx, next) => {
+    const { id } = ctx.params;
+    if (!ObjectId.isValid(id)) {
+        ctx.status = 400; //Client 쪽에서 잘못된 요청을 했다
+        return;
+    }
+    //검증에 오류가 없다면 next
+    return next();
+};
 
 /* 
     POST /api/posts
