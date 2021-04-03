@@ -1,5 +1,6 @@
 import Post from '../../models/post';
 import mongoose from 'mongoose';
+import Joi from 'joi'; //Request Body 검증
 /*
     ObjectId 검증 미들웨어
 */
@@ -29,6 +30,21 @@ export const checkObjectId = (ctx, next) => {
 //Post 모델의 함수는 promise를 반환하기 때문에 async/await 문법에 기반하여 작성한다.
 
 export const write = async (ctx) => {
+    const schema = Joi.object().keys({
+        //객체가 다음 필드를 가지고 있음을 검증
+        title: Joi.string().required(), //required()가 있으면 필수 항목
+        body: Joi.string().required(),
+        tags: Joi.array().items(Joi.string()).required(),
+    });
+
+    //검증 하고 나서 검증 실패인 경우 에러 처리
+    const result = schema.validate(ctx.request.body);
+    if (result.error) {
+        ctx.status = 400; //bad request
+        ctx.body = result.error;
+        return;
+    }
+
     const { title, body, tags } = ctx.request.body;
 
     //모델의 인스턴스를 만들때는 new 키워드를 사용한다. 그리고 생성자 함수의 파라미터에 정보를 지닌 객체를 넣는다
@@ -81,6 +97,18 @@ export const remove = async (ctx) => {
 };
 
 export const update = async (ctx) => {
+    const schema = Joi.object().keys({
+        title: Joi.string(),
+        body: Joi.string(),
+        tags: Joi.array().items(Joi.string()),
+    });
+
+    const result = schema.validate(ctx.request.body);
+    if (result.error) {
+        ctx.status = 400;
+        ctx.body = result.error;
+        return;
+    }
     const { id } = ctx.params;
 
     try {
