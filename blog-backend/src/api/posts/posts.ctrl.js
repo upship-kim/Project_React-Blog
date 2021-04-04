@@ -75,12 +75,19 @@ export const list = async (ctx) => {
             .sort({ _id: -1 }) //역순 정렬
             .limit(10) //한페이지에서 보여줄 수 있는 post 수
             .skip((page - 1) * 10) //다음 페이지에서 보여줄 수 있는 페이지 수 (괄호 안에 숫자만큼 제외하고 보여준다 )
+            .lean() // lean함수를 쓰면 mongoose 문서 인스턴스의 데이터를 JSON으로 변환한다
             .exec(); //list 역순으로 출력하기 /  exec() 전에 sort()함수 사용
 
         //마지막 페이지 번호 알려주기
         const postCount = await Post.countDocuments().exec(); //문서의 총 개수 알려주기 (총 몇개의 post인지 )
         ctx.set('Last-Page', Math.ceil(postCount / 10));
-        ctx.body = posts;
+        ctx.body = posts.map((post) => ({
+            ...post,
+            body:
+                post.body.length < 200
+                    ? post.body
+                    : `${post.body.slice(0, 200)}...`,
+        }));
     } catch (e) {
         ctx.throw(500, e);
     }
