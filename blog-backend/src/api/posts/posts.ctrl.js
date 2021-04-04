@@ -62,8 +62,24 @@ export const write = async (ctx) => {
 };
 
 export const list = async (ctx) => {
+    //다음페이지 기능 구현
+    //query문은 string이기 때문에 parseInt를 사용하여 숫자로 변환해준다.
+    //parseInt(string, radix(:10진수 뭐 이런거))
+    const page = parseInt(ctx.query.page || '1', 10);
+    if (page < 1) {
+        ctx.status = 400;
+        return;
+    }
     try {
-        const posts = await Post.find().exec();
+        const posts = await Post.find()
+            .sort({ _id: -1 }) //역순 정렬
+            .limit(10) //한페이지에서 보여줄 수 있는 post 수
+            .skip((page - 1) * 10) //다음 페이지에서 보여줄 수 있는 페이지 수 (괄호 안에 숫자만큼 제외하고 보여준다 )
+            .exec(); //list 역순으로 출력하기 /  exec() 전에 sort()함수 사용
+
+        //마지막 페이지 번호 알려주기
+        const postCount = await Post.countDocuments().exec(); //문서의 총 개수 알려주기 (총 몇개의 post인지 )
+        ctx.set('Last-Page', Math.ceil(postCount / 10));
         ctx.body = posts;
     } catch (e) {
         ctx.throw(500, e);
