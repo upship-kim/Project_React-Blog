@@ -5,6 +5,7 @@ import Router from 'koa-router';
 import bodyParser from 'koa-bodyparser';
 import mongoose from 'mongoose';
 import createFakeData from './createFakeData';
+import jwtMiddleware from './lib/jwtMiddleware';
 
 //비구조화 할당을 통해 process.env 내부 값에 대한 레퍼런스 만들기
 const { PORT, MONGO_URI } = process.env; //root디렉토리에 .env와 연결되고 있음, dotenv 라이브러리를 통해서 연결되는듯
@@ -30,6 +31,9 @@ router.use('/api', api.routes()); //api 라우트 적용
 
 //router 적용 전에 bodyParser  적용 (:request body에 JSON을 파싱하여 서버에서 사용할 수 있게 해준다 )
 app.use(bodyParser());
+
+//app인스턴스에 jwtMiddleware 적용  (라우터 적용보다 먼저 적용되어야함)
+app.use(jwtMiddleware);
 
 //app 인스턴스에 router를 적용
 app.use(router.routes()).use(router.allowedMethods());
