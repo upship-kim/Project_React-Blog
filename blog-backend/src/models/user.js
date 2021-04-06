@@ -1,5 +1,6 @@
 import mongoose, { Schema } from 'mongoose';
 import bcrypt from 'bcrypt';
+import jwt from 'jsonwebtoken';
 
 const UserSchema = new Schema({
     username: String,
@@ -20,6 +21,16 @@ UserSchema.methods.serialize = function () {
     const data = this.toJSON();
     delete data.hashedPassword;
     return data;
+};
+
+//JsonWebToken 사용 설정
+UserSchema.methods.generateToken = function () {
+    const token = jwt.sign(
+        { _id: this.id, username: this.username }, //첫번쨰 파라미터 : 토큰 안에 집어 넣고 싶은 데이터
+        process.env.JWT_SECRET, //두번째 파라미터: JWT 암호
+        { expiresIn: '7d' }, //세번재 파라미터: 7일동안 사용 가능 (여러 옵션 중 하나)
+    );
+    return token;
 };
 
 //static 메서드는 모델에서 바로 사용할 수 있는 함수

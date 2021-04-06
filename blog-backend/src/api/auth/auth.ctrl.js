@@ -41,6 +41,14 @@ export const register = async (ctx) => {
 
         //응답할 데이터에서 hashedPassword 필드 제거
         ctx.body = user.serialize();
+
+        //JWT 검증 후, token 생성하기
+        const token = user.generateToken(); //this user에서 UserSchema generateToken 검증
+        ctx.cookies.set('access_token', token, {
+            //token 명, 생성할 token정보, token 유효기간 설정
+            maxAge: 1000 * 60 * 60 * 24 * 7, //최대 7일
+            httpOnly: true,
+        });
     } catch (e) {
         ctx.throw(500, e);
     }
@@ -67,6 +75,13 @@ export const login = async (ctx) => {
         }
         console.log(vaild);
         ctx.body = user.serialize(); //유저정보를 보여줌(비밀번호 제외)
+
+        const token = user.generateToken(); //this user에서 UserSchema generateToken 검증
+        ctx.cookies.set('access_token', token, {
+            //token 명, 생성할 token정보, token 유효기간 설정
+            maxAge: 1000 * 60 * 60 * 24 * 7, //최대 7일
+            httpOnly: true,
+        });
     } catch (e) {
         ctx.throw(500, e);
     }
