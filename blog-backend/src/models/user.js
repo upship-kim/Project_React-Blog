@@ -15,6 +15,13 @@ UserSchema.methods.checkPassword = async function (password) {
     const result = await bcrypt.compare(password, this.hashedPassword);
     return result; //true or false 반환
 };
+
+UserSchema.methods.serialize = function () {
+    const data = this.toJSON();
+    delete data.hashedPassword;
+    return data;
+};
+
 //static 메서드는 모델에서 바로 사용할 수 있는 함수
 UserSchema.statics.findByUsername = function (username) {
     return this.findOne({ username }); //여기서 this는 User 모델을 뜻함
