@@ -30,6 +30,7 @@ export const getPostById = async (ctx, next) => {
     return next();
 };
 
+//내가 쓴 포스트인지 확인하기 (for 수정, 삭제)
 export const checkOwnPost = (ctx, next) => {
     const { user, post } = ctx.state;
     if (post.user._id.toString() !== user._id) {
@@ -83,6 +84,11 @@ export const write = async (ctx) => {
     }
 };
 
+//+ username/tags 로 포스트 필터링 하기 (+검색기능)
+/*
+    GET /api/posts?username=&tag=&pa
+*/
+
 export const list = async (ctx) => {
     //다음페이지 기능 구현
     //query문은 string이기 때문에 parseInt를 사용하여 숫자로 변환해준다.
@@ -92,16 +98,25 @@ export const list = async (ctx) => {
         ctx.status = 400;
         return;
     }
+
+    const { tag, username } = ctx.query;
+    //url 쿼리에 tag, username값이 있다면 객체 안에 넣고, 그렇지 않으면 넣지 않음
+    console.log(tag, username);
+    const query = {
+        ...(username ? { 'user.username': username } : {}),
+        ...(tag ? { tags: tag } : {}),
+    };
+
     try {
-        const posts = await Post.find()
+        const posts = await Post.find(query)
             .sort({ _id: -1 }) //역순 정렬
             .limit(10) //한페이지에서 보여줄 수 있는 post 수
             .skip((page - 1) * 10) //다음 페이지에서 보여줄 수 있는 페이지 수 (괄호 안에 숫자만큼 제외하고 보여준다 )
             .lean() // lean함수를 쓰면 mongoose 문서 인스턴스의 데이터를 JSON으로 변환한다
-            .exec(); //list 역순으로 출력하기 /  exec() 전에 sort()함수 사용
+            .exec();
 
         //마지막 페이지 번호 알려주기
-        const postCount = await Post.countDocuments().exec(); //문서의 총 개수 알려주기 (총 몇개의 post인지 )
+        const postCount = await Post.countDocuments(query).exec(); //문서의 총 개수 알려주기 (총 몇개의 post인지 )
         ctx.set('Last-Page', Math.ceil(postCount / 10));
         ctx.body = posts.map((post) => ({
             ...post,
