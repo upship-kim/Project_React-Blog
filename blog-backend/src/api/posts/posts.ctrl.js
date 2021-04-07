@@ -8,11 +8,23 @@ import Joi from 'joi'; //Request Body 검증
 const { ObjectId } = mongoose.Types;
 
 //미들 웨어 작성
-export const checkObjectId = (ctx, next) => {
+export const getPostById = async (ctx, next) => {
     const { id } = ctx.params;
     if (!ObjectId.isValid(id)) {
         ctx.status = 400; //Client 쪽에서 잘못된 요청을 했다
         return;
+    }
+    try {
+        const post = await Post.findById(id);
+        //post가 존재하지 않을때
+        if (!post) {
+            ctx.status = 404;
+            return;
+        }
+        ctx.state.post = post;
+        return next();
+    } catch (e) {
+        ctx.throw(500, e);
     }
     //검증에 오류가 없다면 next
     return next();
@@ -94,19 +106,8 @@ export const list = async (ctx) => {
     }
 };
 
-export const read = async (ctx) => {
-    const { id } = ctx.params;
-
-    try {
-        const post = await Post.findById(id).exec(); //편하네 ~~
-        if (!post) {
-            ctx.status = 404; //not Found
-            return;
-        }
-        ctx.body = post;
-    } catch (e) {
-        ctx.throw(500, e);
-    }
+export const read = (ctx) => {
+    ctx.body = ctx.state.post;
 };
 
 export const remove = async (ctx) => {
