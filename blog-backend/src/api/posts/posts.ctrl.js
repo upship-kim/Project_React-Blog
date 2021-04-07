@@ -30,6 +30,15 @@ export const getPostById = async (ctx, next) => {
     return next();
 };
 
+export const checkOwnPost = (ctx, next) => {
+    const { user, post } = ctx.state;
+    if (post.user._id.toString() !== user._id) {
+        ctx.status = 403;
+        return;
+    }
+    return next();
+};
+
 /* 
     POST /api/posts
     {
@@ -114,7 +123,7 @@ export const remove = async (ctx) => {
     const { id } = ctx.params;
 
     try {
-        const post = await Post.findByIdAndRemove(id).exec();
+        await Post.findByIdAndRemove(id).exec();
         ctx.status = 204; //No content (성공하기는 했지만 응답할 데이터는 없음)
     } catch (e) {
         ctx.throw(500, e);
