@@ -1,5 +1,5 @@
 import React from 'react';
-import styled from 'styled-components';
+import styled, { css } from 'styled-components';
 import palette from '../../lib/styles/palatte';
 
 const StyledButton = styled.button`
@@ -16,6 +16,23 @@ const StyledButton = styled.button`
     &:hover {
         background: ${palette.gray[6]};
     }
+
+    ${(props) =>
+        props.fullWidth &&
+        css`
+            padding-top: 0.75rem;
+            padding-bottom: 0.75rem;
+            width: 100%;
+            font-size: 1.125rem;
+        `}
+    ${(props) =>
+        props.cyan &&
+        css`
+            background: ${palette.cyan[8]};
+            &:hover {
+                background: ${palette.cyan[6]};
+            }
+        `}
 `;
 
 // Button에 넣는 이유는 다른 컴포넌트에서 자동으로 import 되게끔하려고 ! (styled-components로 만든 컴포넌트는 자동 import가 안됨)
