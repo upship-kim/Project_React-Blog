@@ -20,8 +20,8 @@ const StyledButton = styled.button`
     ${(props) =>
         props.fullWidth &&
         css`
-            padding-top: 0.75rem;
-            padding-bottom: 0.75rem;
+            padding-top: 0.5rem;
+            padding-bottom: 0.5rem;
             width: 100%;
             font-size: 1.125rem;
         `}
