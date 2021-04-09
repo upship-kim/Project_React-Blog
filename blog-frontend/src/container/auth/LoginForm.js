@@ -6,6 +6,7 @@ import { changeField, initializeForm } from '../../modules/auth';
 const LoginForm = () => {
     const dispatch = useDispatch();
     const { form } = useSelector(({ auth }) => ({
+        //store에 저장된 form값을 가져옴
         form: auth.login,
     }));
 
