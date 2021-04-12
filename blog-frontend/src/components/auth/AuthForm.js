@@ -55,6 +55,15 @@ const ButtonTopMargin = styled(Button)`
     margin-top: 1rem;
 `;
 
+//에러 문구
+
+const ErrorMessage = styled.div`
+    color: red;
+    text-align: center;
+    font-size: 0.875rem;
+    margin-top: 1rem;
+`;
+
 //autoComplete = 자동완성 입력 필드
 
 //재사용 가능한 컴포넌트로 만들기
@@ -63,7 +72,7 @@ const textMap = {
     register: '회원가입',
 };
 
-const AuthForm = ({ type, form, onChange, onSubmit }) => {
+const AuthForm = ({ type, form, onChange, onSubmit, error }) => {
     const text = textMap[type];
     console.log('form', form);
     return (
@@ -96,7 +105,11 @@ const AuthForm = ({ type, form, onChange, onSubmit }) => {
                         value={form.passwordConfirm}
                     />
                 )}
-
+                {error && (
+                    <ErrorMessage>
+                        아이디 및 비밀번호를 확인해주세요
+                    </ErrorMessage>
+                )}
                 {/* Button 태그 뒤로 입력하면 props 값으로 넘어감 (<Button fullWidth={true} cyan={true}/> 와 같은 의미) */}
                 <ButtonTopMargin fullWidth cyan>
                     {text}

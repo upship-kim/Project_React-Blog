@@ -1,4 +1,4 @@
-import { useEffect } from 'react';
+import React, { useEffect, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import AuthForm from '../../components/auth/AuthForm';
 import { changeField, initializeForm, login } from '../../modules/auth';
@@ -14,6 +14,7 @@ const LoginForm = ({ history }) => {
         authError: auth.authError,
         user: user.user,
     }));
+    const [error, setError] = useState(null);
 
     //인풋 변경 이벤트 핸들러
     const onChange = (e) => {
@@ -44,6 +45,13 @@ const LoginForm = ({ history }) => {
         if (authError) {
             console.log('오류 발생');
             console.log(authError);
+            setError('로그인 실패');
+            dispatch(
+                changeField({ form: 'login', key: 'username', value: '' }),
+            );
+            dispatch(
+                changeField({ form: 'login', key: 'password', value: '' }),
+            );
             return;
         }
         if (auth) {
@@ -67,6 +75,7 @@ const LoginForm = ({ history }) => {
             form={form}
             onChange={onChange}
             onSubmit={onSubmit}
+            error={error}
         />
     );
 };
