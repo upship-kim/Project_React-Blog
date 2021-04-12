@@ -105,11 +105,7 @@ const AuthForm = ({ type, form, onChange, onSubmit, error }) => {
                         value={form.passwordConfirm}
                     />
                 )}
-                {error && (
-                    <ErrorMessage>
-                        아이디 및 비밀번호를 확인해주세요
-                    </ErrorMessage>
-                )}
+                {error && <ErrorMessage>{error}</ErrorMessage>}
                 {/* Button 태그 뒤로 입력하면 props 값으로 넘어감 (<Button fullWidth={true} cyan={true}/> 와 같은 의미) */}
                 <ButtonTopMargin fullWidth cyan>
                     {text}
