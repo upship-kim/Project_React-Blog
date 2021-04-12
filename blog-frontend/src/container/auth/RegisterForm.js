@@ -3,8 +3,10 @@ import { useDispatch, useSelector } from 'react-redux';
 import AuthForm from '../../components/auth/AuthForm';
 import { changeField, initializeForm, register } from '../../modules/auth';
 import { check } from '../../modules/user';
+import { withRouter } from 'react-router-dom';
 
-const RegisterForm = () => {
+const RegisterForm = ({ history }) => {
+    //withRouter를 사용하여 history객체 사용할 수 있음
     const dispatch = useDispatch();
     const { form, auth, authError, user } = useSelector(({ auth, user }) => ({
         form: auth.register,
@@ -60,8 +62,9 @@ const RegisterForm = () => {
         if (user) {
             console.log('check API 성공');
             console.log(user);
+            history.push('/'); //user 리덕스에 정보가 들어가면 홈화면으로 이동
         }
-    }, [user]);
+    }, [history, user]);
 
     return (
         <AuthForm
@@ -73,4 +76,4 @@ const RegisterForm = () => {
     );
 };
 
-export default RegisterForm;
+export default withRouter(RegisterForm);

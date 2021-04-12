@@ -1,4 +1,4 @@
-import { all, takeLatest } from 'redux-saga/effects';
+import { takeLatest } from 'redux-saga/effects';
 import { createAction, handleActions } from 'redux-actions';
 import * as authAPI from '../lib/api/auth';
 import createRequestSaga from '../lib/createRequestSaga';
