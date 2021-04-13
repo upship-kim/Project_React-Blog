@@ -80,6 +80,11 @@ const RegisterForm = ({ history }) => {
             console.log('check API 성공');
             console.log(user);
             history.push('/'); //user 리덕스에 정보가 들어가면 홈화면으로 이동
+            try {
+                localStorage.setItem('user', JSON.stringify(user));
+            } catch (e) {
+                console.log('localStorage is not working');
+            }
         }
     }, [history, user]);
 
