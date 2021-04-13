@@ -36,15 +36,6 @@ const QuillWrapper = styled.div`
     }
 `;
 
-const Test = styled.div`
-    color: blue;
-    .Test {
-        background: red;
-        min-height: 320px;
-        width: 100%;
-    }
-`;
-
 const Editor = () => {
     const quillElement = useRef(null); //Quill을 적용할 DivElement 를 설정
     const quillInstance = useRef(null); //Quill 인스턴스를 설정
