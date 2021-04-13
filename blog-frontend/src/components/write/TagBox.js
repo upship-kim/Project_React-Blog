@@ -3,9 +3,11 @@ import styled from 'styled-components';
 import palette from '../../lib/styles/palatte';
 
 const TagBoxBlock = styled.div`
+    padding-left: 1rem;
+    padding-right: 1rem;
     width: 100%;
     border-top: 1px solid ${palette.gray[2]};
-    padding-top1: 0.5rem;
+    padding-top: 0.5rem;
 
     h4 {
         color: ${palette.gray[8]};
