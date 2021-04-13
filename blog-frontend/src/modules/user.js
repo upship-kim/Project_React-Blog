@@ -1,4 +1,4 @@
-import { takeLatest } from 'redux-saga/effects';
+import { call, take, takeLatest } from 'redux-saga/effects';
 import { createAction, handleActions } from 'redux-actions';
 import * as authAPI from '../lib/api/auth';
 import createRequestSaga from '../lib/createRequestSaga';
@@ -9,13 +9,35 @@ const CHECK = 'user/CHECK';
 const CHECK_SUCCESS = 'user/CHECK_SUCCESS';
 const CHECK_FAILURE = 'user/CHECK_FAILURE';
 
+const LOGOUT = 'user/LOGOUT';
+
 export const tempSetUser = createAction(TEMP_SET_USER, (user) => user);
 export const check = createAction(CHECK);
+export const logout = createAction(LOGOUT);
 
 const checkSaga = createRequestSaga(CHECK, authAPI.check);
 
+function checkFailureSaga() {
+    try {
+        localStorage.removeItem('user');
+    } catch (e) {
+        console.log('localStorage is not working');
+    }
+}
+
+function* logoutSaga() {
+    try {
+        yield call(authAPI.logout); //logout API 호출
+        localStorage.removeItem('user');
+    } catch (e) {
+        console.log('logout error', e);
+    }
+}
+
 export function* userSaga() {
     yield takeLatest(CHECK, checkSaga);
+    yield takeLatest(CHECK_FAILURE, checkFailureSaga);
+    yield takeLatest(LOGOUT, logoutSaga);
 }
 
 const initialState = {
@@ -38,6 +60,10 @@ export default handleActions(
             ...state,
             user: null,
             checkError: error,
+        }),
+        [LOGOUT]: (state, { payload: user }) => ({
+            ...state,
+            user: null,
         }),
     },
     initialState,
