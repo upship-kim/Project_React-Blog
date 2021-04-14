@@ -11,6 +11,7 @@ const EditorBlock = styled(Responsive)`
     */
     padding-top: 5rem;
     padding-bottom: 5rem;
+    padding-left: 0;
 `;
 
 const TitleInput = styled.input`
