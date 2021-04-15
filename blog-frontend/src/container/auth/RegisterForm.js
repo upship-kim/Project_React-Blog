@@ -65,7 +65,7 @@ const RegisterForm = ({ history }) => {
             if (authError.response.status === 409) {
                 setError('이미 존재하는 아이디 입니다.');
             }
-
+            console.log(authError);
             return;
         }
         if (auth) {

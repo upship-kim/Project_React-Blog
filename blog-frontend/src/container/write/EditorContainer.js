@@ -12,7 +12,7 @@ const EditorContainer = () => {
 
     const onChangeField = useCallback(
         (payload) => {
-            changeField(payload);
+            dispatch(changeField(payload));
         },
         [dispatch],
     );

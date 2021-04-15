@@ -61,17 +61,25 @@ const Editor = ({ title, body, onChangeField }) => {
         //quill에 text-change 이벤트 핸들러 등록
         //참고 : https://quilljs.com/docs/#events
         const quill = quillInstance.current;
-        quill.on('text-change', function (delta, oldDelta, source) {
-            if (source == 'user') {
+        quill.on('text-change', (delta, oldDelta, source) => {
+            if (source === 'user') {
                 console.log('An API call triggered this change.');
                 onChangeField({ key: 'body', value: quill.root.innerHTML });
             }
         });
     }, [onChangeField]);
 
+    const onChangeTitle = (e) => {
+        onChangeField({ key: 'title', value: e.target.value });
+    };
+
     return (
         <EditorBlock>
-            <TitleInput placeholder="제목을 입력하세요" />
+            <TitleInput
+                placeholder="제목을 입력하세요"
+                onChange={onChangeTitle}
+                value={title}
+            />
             <QuillWrapper>
                 <div ref={quillElement} />
             </QuillWrapper>
