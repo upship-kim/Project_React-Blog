@@ -37,7 +37,10 @@ const QuillWrapper = styled.div`
     }
 `;
 
-const Editor = () => {
+// onChangeField={onChangeField}
+// title={title}
+// body={body}
+const Editor = ({ title, body, onChangeField }) => {
     const quillElement = useRef(null); //Quill을 적용할 DivElement 를 설정
     const quillInstance = useRef(null); //Quill 인스턴스를 설정
 
@@ -56,6 +59,17 @@ const Editor = () => {
             },
         });
     }, []);
+
+    //quill에 text-change 이벤트 핸들러 등록
+    //참고 : https://quilljs.com/docs/#events
+    const quill = quillInstance.current;
+    quill.on('text-change', function (delta, oldDelta, source) {
+        if (source == 'api') {
+            console.log('An API call triggered this change.');
+        } else if (source == 'user') {
+            console.log('A user action triggered this change.');
+        }
+    });
 
     return (
         <EditorBlock>
