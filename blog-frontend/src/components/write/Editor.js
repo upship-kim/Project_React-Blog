@@ -58,18 +58,16 @@ const Editor = ({ title, body, onChangeField }) => {
                 ],
             },
         });
-    }, []);
-
-    //quill에 text-change 이벤트 핸들러 등록
-    //참고 : https://quilljs.com/docs/#events
-    const quill = quillInstance.current;
-    quill.on('text-change', function (delta, oldDelta, source) {
-        if (source == 'api') {
-            console.log('An API call triggered this change.');
-        } else if (source == 'user') {
-            console.log('A user action triggered this change.');
-        }
-    });
+        //quill에 text-change 이벤트 핸들러 등록
+        //참고 : https://quilljs.com/docs/#events
+        const quill = quillInstance.current;
+        quill.on('text-change', function (delta, oldDelta, source) {
+            if (source == 'user') {
+                console.log('An API call triggered this change.');
+                onChangeField({ key: 'body', value: quill.root.innerHTML });
+            }
+        });
+    }, [onChangeField]);
 
     return (
         <EditorBlock>
