@@ -17,7 +17,7 @@ const EditorContainer = () => {
         [dispatch],
     );
 
-    //언마운트될때 초기화
+    // 언마운트될때 초기화
     useEffect(() => {
         return () => {
             dispatch(initialize());

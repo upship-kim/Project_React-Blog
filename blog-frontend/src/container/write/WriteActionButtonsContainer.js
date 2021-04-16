@@ -15,7 +15,13 @@ const WriteActionButtonsContainer = ({ history }) => {
     }));
 
     const onPublish = () => {
-        dispatch(writePost({ title, body, tags }));
+        dispatch(
+            writePost({
+                title,
+                body,
+                tags,
+            }),
+        );
     };
 
     const onCancel = () => {

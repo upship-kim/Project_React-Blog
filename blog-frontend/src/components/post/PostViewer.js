@@ -49,26 +49,27 @@ const PostContent = styled.div`
     color: ${palette.gray[8]};
 `;
 
-const PostViewer = () => {
+const PostViewer = ({ post, error, loading }) => {
+    const { title, body, user, publishedDate, tags } = post;
     return (
         <PostViewerBlock>
             <PostHead>
-                <h1>제목</h1>
+                <h1>{title}</h1>
                 <SubInfo>
                     <span>
-                        <b>tester</b>
+                        <b>{user}</b>
                     </span>
-                    <span>{new Date().toLocaleDateString()}</span>
+                    <span>{publishedDate.toLocaleDateString()}</span>
                 </SubInfo>
                 <Tags>
-                    <div className="tag">#태그1</div>
-                    <div className="tag">#태그2</div>
-                    <div className="tag">#태그3</div>
+                    {tags.map((tag) => (
+                        <div className="tag">#{tag}</div>
+                    ))}
                 </Tags>
             </PostHead>
             <PostContent
                 dangerouslySetInnerHTML={{
-                    __html: '<p>HTML <b> 내용 </b> 입니다 </p>',
+                    __html: body,
                 }}
             ></PostContent>
         </PostViewerBlock>
