@@ -26,8 +26,8 @@ export const getPostById = async (ctx, next) => {
     } catch (e) {
         ctx.throw(500, e);
     }
-    //검증에 오류가 없다면 next
-    return next();
+    // //검증에 오류가 없다면 next
+    // return next();
 };
 
 //내가 쓴 포스트인지 확인하기 (for 수정, 삭제)

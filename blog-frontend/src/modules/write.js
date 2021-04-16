@@ -1,4 +1,3 @@
-import React from 'react';
 import { createAction, handleActions } from 'redux-actions';
 import createRequestSaga from '../lib/createRequestSaga';
 import * as postsAPI from '../lib/api/posts';

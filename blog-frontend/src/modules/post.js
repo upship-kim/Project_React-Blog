@@ -14,9 +14,10 @@ const UNLOAD_POST = 'post/UNLOAD_POST';
 
 export const readPost = createAction(READ_POST, (id) => id);
 export const unloadPost = createAction(UNLOAD_POST);
+
 const readPostSaga = createRequestSaga(READ_POST, postsAPI.readPost);
 
-export function* readSaga() {
+export function* postSaga() {
     yield takeLatest(READ_POST, readPostSaga);
 }
 
@@ -29,12 +30,6 @@ const initialState = {
 //reducer 생성
 const post = handleActions(
     {
-        [READ_POST]: (state) => ({
-            //상태값 post & postError 초기화
-            ...state,
-            post: null,
-            error: null,
-        }),
         [READ_POST_SUCCESS]: (state, { payload: post }) => ({
             ...state,
             post,

@@ -50,6 +50,21 @@ const PostContent = styled.div`
 `;
 
 const PostViewer = ({ post, error, loading }) => {
+    //에러 발생시
+    if (error) {
+        if (error.response && error.response.status === 404) {
+            return (
+                <PostViewerBlock>존재하지 않는 포스트 입니다.</PostViewerBlock>
+            );
+        }
+        return <PostViewerBlock>오류 발생 !</PostViewerBlock>;
+    }
+
+    //로딩중이거나 아직 포스트 데이터가 없을때
+    if (loading || !post) {
+        return <PostViewerBlock>왜안떠</PostViewerBlock>;
+    }
+
     const { title, body, user, publishedDate, tags } = post;
     return (
         <PostViewerBlock>
@@ -57,21 +72,19 @@ const PostViewer = ({ post, error, loading }) => {
                 <h1>{title}</h1>
                 <SubInfo>
                     <span>
-                        <b>{user}</b>
+                        <b>{user.username}</b>
                     </span>
-                    <span>{publishedDate.toLocaleDateString()}</span>
+                    <span>{new Date(publishedDate).toLocaleDateString()}</span>
                 </SubInfo>
                 <Tags>
                     {tags.map((tag) => (
-                        <div className="tag">#{tag}</div>
+                        <div className="tag" key={tag}>
+                            #{tag}
+                        </div>
                     ))}
                 </Tags>
             </PostHead>
-            <PostContent
-                dangerouslySetInnerHTML={{
-                    __html: body,
-                }}
-            ></PostContent>
+            <PostContent dangerouslySetInnerHTML={{ __html: body }} />
         </PostViewerBlock>
     );
 };

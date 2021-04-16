@@ -11,9 +11,8 @@ const EditorContainer = () => {
     }));
 
     const onChangeField = useCallback(
-        (payload) => {
-            dispatch(changeField(payload));
-        },
+        (payload) => dispatch(changeField(payload)),
+
         [dispatch],
     );
 
@@ -24,13 +23,7 @@ const EditorContainer = () => {
         };
     }, [dispatch]);
 
-    return (
-        <Editor
-            onChangeField={onChangeField}
-            title={title}
-            body={body}
-        ></Editor>
-    );
+    return <Editor onChangeField={onChangeField} title={title} body={body} />;
 };
 
 export default EditorContainer;
