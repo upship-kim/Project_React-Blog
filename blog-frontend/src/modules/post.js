@@ -1,4 +1,3 @@
-import React from 'react';
 import { createAction, handleActions } from 'redux-actions';
 import createRequestSaga from '../lib/createRequestSaga';
 import * as postsAPI from '../lib/api/posts';
@@ -11,7 +10,6 @@ const READ_POST_FAILURE = 'post/READ_POST_FAILURE';
 const UNLOAD_POST = 'post/UNLOAD_POST';
 
 //action 함수 정의
-
 export const readPost = createAction(READ_POST, (id) => id);
 export const unloadPost = createAction(UNLOAD_POST);
 

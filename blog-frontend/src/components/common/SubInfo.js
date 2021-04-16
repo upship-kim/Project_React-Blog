@@ -23,7 +23,7 @@ const SubInfoBlock = styled.div`
 
 const SubInfo = ({ hasMarginTop, username, publishedDate }) => {
     return (
-        <SubInfoBlock>
+        <SubInfoBlock hasMarginTop={hasMarginTop}>
             <span>
                 <b>
                     <Link to={`/@${username}`}>{username}</Link>
