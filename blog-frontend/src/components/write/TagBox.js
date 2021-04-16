@@ -87,7 +87,7 @@ const TagBox = ({ onChangeTags, tags }) => {
         [localTags, onChangeTags],
     );
 
-    const removeTag = useCallback(
+    const onRemove = useCallback(
         (tag) => {
             const nextTags = localTags.filter((t) => t !== tag);
             setLocalTags(nextTags);
@@ -125,7 +125,7 @@ const TagBox = ({ onChangeTags, tags }) => {
                 />
                 <button type="submit">추가</button>
             </TagForm>
-            <TagList tags={localTags} onRemove={removeTag}></TagList>
+            <TagList tags={localTags} onRemove={onRemove} />
         </TagBoxBlock>
     );
 };
