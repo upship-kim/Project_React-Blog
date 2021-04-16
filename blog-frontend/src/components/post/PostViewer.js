@@ -36,7 +36,7 @@ const Tags = styled.div`
     .tag {
         display: inline-block;
         color: ${palette.cyan[7]};
-        text-text-decoration: none;
+        text-decoration: none;
         margin-right: 0.5rem;
         &:hover {
             color: ${palette.cyan[6]};
