@@ -1,8 +1,13 @@
 import React from 'react';
 import PostViewer from '../components/post/PostViewer';
-
+import HeaderContainer from '../container/common/HeaderContainer';
 const PostPage = () => {
-    return <PostViewer />;
+    return (
+        <>
+            <HeaderContainer />
+            <PostViewer />
+        </>
+    );
 };
 
 export default PostPage;
