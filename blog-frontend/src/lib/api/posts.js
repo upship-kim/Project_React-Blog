@@ -15,3 +15,11 @@ export const listPosts = ({ page, username, tag }) => {
     return client.get(`/api/posts?${queryString}`);
     //호출 예 : /api/posts?page=1&username=tester
 };
+
+export const updatePost = ({ id, title, body, tags }) => {
+    return client.patch(`/api/posts/${id}`, {
+        title,
+        body,
+        tags,
+    });
+};
