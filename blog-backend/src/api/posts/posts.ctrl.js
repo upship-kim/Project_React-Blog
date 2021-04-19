@@ -1,6 +1,7 @@
 import Post from '../../models/post';
 import mongoose from 'mongoose';
 import Joi from 'joi'; //Request Body 검증
+import sanitizeHtml from 'sanitize-html';
 /*
     ObjectId 검증 미들웨어
 */
@@ -50,6 +51,29 @@ export const checkOwnPost = (ctx, next) => {
 */
 
 //Post 모델의 함수는 promise를 반환하기 때문에 async/await 문법에 기반하여 작성한다.
+const sanitizeOption = {
+    allowedTags: [
+        'h1',
+        'h2',
+        'b',
+        'i',
+        'u',
+        's',
+        'p',
+        'ul',
+        'ol',
+        'li',
+        'blockquote',
+        'a',
+        'img',
+    ],
+    allowedAttributes: {
+        a: ['href', 'name', 'target'],
+        img: ['src'],
+        li: ['class'],
+    },
+    allowedSchemes: ['data', 'http'],
+};
 
 export const write = async (ctx) => {
     const schema = Joi.object().keys({
@@ -72,7 +96,7 @@ export const write = async (ctx) => {
     //모델의 인스턴스를 만들때는 new 키워드를 사용한다. 그리고 생성자 함수의 파라미터에 정보를 지닌 객체를 넣는다
     const post = new Post({
         title,
-        body,
+        body: sanitizeHtml(body, sanitizeOption),
         tags,
         user: ctx.state.user,
     });
@@ -88,6 +112,13 @@ export const write = async (ctx) => {
 /*
     GET /api/posts?username=&tag=&pa
 */
+
+const removeHtmlAndShorten = (body) => {
+    const filtered = sanitizeHtml(body, {
+        allowedTags: [],
+    });
+    return filtered.length < 200 ? filtered : `${filtered.slice(0, 200)}...`;
+};
 
 export const list = async (ctx) => {
     //다음페이지 기능 구현
@@ -120,10 +151,7 @@ export const list = async (ctx) => {
         ctx.set('Last-Page', Math.ceil(postCount / 10));
         ctx.body = posts.map((post) => ({
             ...post,
-            body:
-                post.body.length < 200
-                    ? post.body
-                    : `${post.body.slice(0, 200)}...`,
+            body: removeHtmlAndShorten(post.body),
         }));
     } catch (e) {
         ctx.throw(500, e);
@@ -158,11 +186,17 @@ export const update = async (ctx) => {
         ctx.body = result.error;
         return;
     }
+
+    const nextData = { ...ctx.request.body };
+    if (nextData.body) {
+        nextData.body = sanitizeHtml(nextData.body, sanitizeOption);
+    }
+
     const { id } = ctx.params;
 
     try {
         //findByIdAndUpdate(id, 업데이트 내용, 업데이트 옵션)
-        const post = await Post.findByIdAndUpdate(id, ctx.request.body, {
+        const post = await Post.findByIdAndUpdate(id, nextData, {
             new: true,
         }).exec();
         if (!post) {
