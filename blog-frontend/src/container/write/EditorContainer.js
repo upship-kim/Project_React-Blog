@@ -5,7 +5,7 @@ import { changeField, initialize, setOriginalPost } from '../../modules/write';
 
 const EditorContainer = () => {
     const dispatch = useDispatch();
-    const { title, body } = useSelector(({ write, post }) => ({
+    const { title, body } = useSelector(({ write }) => ({
         title: write.title,
         body: write.body,
     }));

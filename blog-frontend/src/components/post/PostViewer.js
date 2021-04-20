@@ -37,7 +37,7 @@ const PostViewer = ({ post, error, loading, actionButtons }) => {
 
     //로딩중이거나 아직 포스트 데이터가 없을때
     if (loading || !post) {
-        return <PostViewerBlock>왜안떠</PostViewerBlock>;
+        return <PostViewerBlock>loading..</PostViewerBlock>;
     }
 
     const { title, body, user, publishedDate, tags } = post;

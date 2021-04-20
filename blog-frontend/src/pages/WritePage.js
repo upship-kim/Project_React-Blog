@@ -1,4 +1,5 @@
 import React from 'react';
+import AskModal from '../components/common/AskModal';
 import Responsive from '../components/common/Responsive';
 import HeaderContainer from '../container/common/HeaderContainer';
 import EditorContainer from '../container/write/EditorContainer';
