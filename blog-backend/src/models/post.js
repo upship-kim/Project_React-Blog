@@ -1,8 +1,8 @@
 import mongoose from 'mongoose';
-import { string } from '../../node_modules/joi/lib/index';
 
 const { Schema } = mongoose;
 
+//스키마 생성 : 컬렉션에 들어가는 문서 내부의 각 필드가 어떤 형식인지 정의하는 객체
 const PostSchema = new Schema({
     title: String,
     body: String,
@@ -18,5 +18,6 @@ const PostSchema = new Schema({
 });
 
 //mongoose.model 생성
+//위 스키마를 토대로 모델 실제 데이터베이스를 활용할 수 있는 인스턴스
 const Post = mongoose.model('Post', PostSchema);
 export default Post;

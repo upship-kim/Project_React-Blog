@@ -25,7 +25,8 @@ const PostsListContainer = ({ location, match }) => {
         });
 
         dispatch(listPosts({ tag, username, page }));
-    }, [dispatch, location.search]);
+        // eslint-disable-next-line react-hooks/exhaustive-deps
+    }, [dispatch, location.search, match.params]);
 
     return (
         <PostList
